@@ -1,0 +1,30 @@
+.main-weather{
+    display: flex;
+        padding: 6px 12px;
+        flex-direction: column;
+    .header{
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        .temp{
+            h2{
+                font-size: 2.5rem;
+            }
+        }
+    }
+    Button{
+        margin: 1rem 0;
+    }
+}
+.weather-card-container{
+align-items: center;
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 12px;
+    cursor: pointer;
+}
+@media only screen and (max-width: 600px) {
+    .weather-card-container {
+        flex-direction: column;
+    }
+}
