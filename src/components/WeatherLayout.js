@@ -7,8 +7,19 @@ import WeatherCard from "./WeatherCard";
 
 function WeatherLayout(props) {
   const [toggle, setToggle] = useState(true);
+  const [time, setTime] = useState();
 
-  const d = new Date();
+  // const d = new Date();
+  const myClock = () => {
+    const d = new Date();
+    setTime(d.toLocaleString());
+  };
+  React.useEffect(() => {
+    const Interval = setInterval(() => {
+      myClock();
+    }, 1000);
+    return () => clearInterval(Interval);
+  });
 
   console.log(props);
   const kelvinToCelsius = (temp) => {
@@ -24,7 +35,7 @@ function WeatherLayout(props) {
       ) : (
         <Paper className="main-weather" elevation={5}>
           <div className="header">
-            <p>{d.toLocaleString()}</p>
+            <p>{time}</p>
           </div>
           <div className="header">
             <div className="temp">
@@ -47,7 +58,7 @@ function WeatherLayout(props) {
           >
             Next 3 Days Forcast
           </Button>
-          {props.weatherData.daily.slice(0, 3).map((data, i) => (
+          {props.weatherData.daily.slice(1, 4).map((data, i) => (
             <React.Fragment key={i}>
               {toggle ? null : (
                 <WeatherCard

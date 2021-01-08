@@ -66,7 +66,7 @@ function CurrencyLayout(props) {
           }}
         >
           <img src={loader} alt="Loader" />
-          <p>{error}</p>
+          <p>{error}, PLEASE REFRESH</p>
         </div>
       ) : (
         //   {
@@ -83,7 +83,7 @@ function CurrencyLayout(props) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {Mycurrency.slice(1, 5).map((row, i) => (
+              {Mycurrency.map((row, i) => (
                 <TableRow key={i}>
                   {row.map((data, j) => (
                     <>
