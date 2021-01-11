@@ -2,6 +2,7 @@ const initState = {
   loadingWeather: true,
   loadingCurrency: true,
   weatherData: [],
+  currentTemp: "",
   currency: [],
   error: "",
   latitude: "",
@@ -15,6 +16,13 @@ const weatherReducer = (state = initState, action) => {
         ...state,
         loadingWeather: false,
         weatherData: action.payload,
+        // currentTemp: action.payload.current,
+      };
+
+    case "FETCH_CURRENT_TEMP":
+      return {
+        ...state,
+        currentTemp: action.payload,
       };
     case "FETCH_CURRENCY_SUCCESS":
       return {

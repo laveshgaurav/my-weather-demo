@@ -7,12 +7,13 @@ import {
   TableHead,
   TableRow,
 } from "@material-ui/core";
-import React from "react";
+import React, { useRef } from "react";
 import { BiCloudDrizzle } from "react-icons/bi";
 import { GiWindsock } from "react-icons/gi";
 import "./WeatherLayout.css";
 function WeatherCard({ data }) {
   const [toggle, setToggle] = React.useState(true);
+  const card = useRef(null);
 
   //   console.log(props);
   const kelvinToCelsius = (temp) => {
@@ -22,10 +23,13 @@ function WeatherCard({ data }) {
   };
 
   return (
-    <Paper style={{ margin: "0.8rem" }}>
+    <Paper ref={card} style={{ margin: "6px 0", opacity: 1 }} draggable="true">
       <div
+        Style={{ opacity: 1 }}
         className="weather-card-container"
-        onClick={() => setToggle(!toggle)}
+        onClick={(e) => {
+          setToggle(!toggle);
+        }}
       >
         <h2 style={{ padding: "10px" }}>
           {new Date(parseInt(data.dt.toString() + "000")).toDateString()}

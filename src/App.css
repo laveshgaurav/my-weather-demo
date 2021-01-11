@@ -38,6 +38,14 @@
    border-radius: 12px
 
 }
+
+
+.dragElem{
+  opacity: 0.4;
+}
+.over {
+  border-top: 2px solid blue;
+}
 @media only screen and (max-width: 600px) {
   .container {
     width: 100vw;

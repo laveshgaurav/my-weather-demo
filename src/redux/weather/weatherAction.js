@@ -6,12 +6,20 @@ export const loadWeatherRequest = () => {
   };
 };
 
-export const loadWeatherSuccess = (users) => {
+export const loadWeatherSuccess = (weatherData) => {
   return {
     type: "FETCH_REQUEST_SUCCESS",
-    payload: users,
+    payload: weatherData,
   };
 };
+
+export const loadCurrentTemp = (data) => {
+  return {
+    type: "FETCH_CURRENT_TEMP",
+    payload: data,
+  };
+};
+
 export const loadCurrencySuccess = (users) => {
   return {
     type: "FETCH_CURRENCY_SUCCESS",
@@ -59,6 +67,7 @@ export const loadWeather = () => {
               .then((resp) => {
                 console.log(resp.data);
                 dispatch(loadWeatherSuccess(resp.data));
+                dispatch(loadCurrentTemp(resp.data.current.temp));
               });
 
             axios
@@ -91,6 +100,22 @@ export const loadWeather = () => {
           timeout: 5000,
         }
       );
+    }
+  };
+};
+
+export const getSearchData = (cityname) => {
+  return (dispatch) => {
+    try {
+      axios
+        .get(
+          `https://api.openweathermap.org/data/2.5/weather?q=${cityname}&appid=c0e338a36480ecce8e72b69694d1cee5`
+        )
+        .then((resp) => {
+          dispatch(loadCurrentTemp(resp.data.main.temp));
+        });
+    } catch (err) {
+      console.log(err.message);
     }
   };
 };

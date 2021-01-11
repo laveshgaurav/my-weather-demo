@@ -40,7 +40,12 @@
       -ms-flex-pack: justify;
           justify-content: space-between;
   padding: 4px 12px;
-  cursor: pointer;
+  cursor: move;
+  -webkit-user-select: none;
+  -moz-user-select: -moz-none;
+  -o-user-select: none;
+  -ms-user-select: none;
+      user-select: none;
 }
 
 @media only screen and (max-width: 600px) {

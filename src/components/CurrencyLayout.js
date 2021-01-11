@@ -13,10 +13,15 @@ import { connect } from "react-redux";
 import loader from "../asset/805.gif";
 
 function CurrencyLayout(props) {
+  var dragSrcEl;
   const [Mycurrency, setCurrency] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState("");
 
+  const rowItem = [];
+  var indexitem;
+  const TableRef = React.useRef(null);
+  // console.log(rowItem);
   React.useState(async () => {
     try {
       const resp = await axios.get(
@@ -43,6 +48,60 @@ function CurrencyLayout(props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  function handleDragStart(e, value) {
+    // Target (this) element is the source node.
+    console.log(value.current.outerHTML);
+    console.log(e);
+    dragSrcEl = value.current;
+
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/html", value.current.outerHTML);
+
+    // value.current.classList.add("dragElem");
+  }
+
+  function handleDragOver(e, i) {
+    // console.log(value);
+    if (e.preventDefault) {
+      e.preventDefault(); // Necessary. Allows us to drop.
+    }
+    indexitem = i;
+    console.log(i);
+    e.dataTransfer.dropEffect = "move"; // See the section on the DataTransfer object.
+
+    return false;
+  }
+
+  function handleDrop(e, value) {
+    // this/e.target is current target element.
+    console.log("drop");
+
+    console.log(dragSrcEl);
+    console.log(value.current);
+
+    if (e.stopPropagation) {
+      e.stopPropagation();
+    }
+
+    // Don't do anything if dropping the same column we're dragging.
+    if (dragSrcEl !== value.current) {
+      console.log("in loop");
+      console.log(TableRef.current.childNodes);
+      var dropHTML = e.dataTransfer.getData("text/html");
+      value.current.insertAdjacentHTML("beforebegin", dropHTML);
+      e.dataTransfer.setData("text/html", null);
+      // TableRef.current.removeChild(TableRef.current.childNodes[indexitem]);
+    }
+
+    return false;
+  }
+
+  // function addDnDHandlers(e,elem) {
+  //   elem.addEventListener("dragstart", handleDragStart(e,elem), false);
+  //   elem.addEventListener("dragover", handleDragOver(e, elem), false);
+  //   elem.addEventListener("drop", handleDrop(e, elem), false);
+  // }
 
   return (
     <Paper
@@ -78,20 +137,42 @@ function CurrencyLayout(props) {
             <caption>Current currency rate.</caption>
             <TableHead>
               <TableRow>
+                <TableCell></TableCell>
                 <TableCell>Currency</TableCell>
                 <TableCell>Rate</TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
-              {Mycurrency.map((row, i) => (
-                <TableRow key={i}>
-                  {row.map((data, j) => (
+            <TableBody ref={TableRef}>
+              {Mycurrency.slice(0, 5).map((row, i) => {
+                const newRef = React.createRef();
+                rowItem.push(newRef);
+                // console.log(newRef);
+                return (
+                  <TableRow
+                    ref={newRef}
+                    // ref={(ref) => (rowItem[i] = ref)}
+                    onDragStart={(e) => handleDragStart(e, rowItem[i])}
+                    onDragOver={(e) => handleDragOver(e, i)}
+                    onDrop={(e) => handleDrop(e, rowItem[i])}
+                    draggable="true"
+                    key={i}
+                    id={i}
+                    style={{ cursor: "move" }}
+                  >
+                    <TableCell>
+                      <i className="fa fa-bars" aria-hidden="true"></i>
+                    </TableCell>
+                    <TableCell>{row[0]}</TableCell>
+                    <TableCell>{row[1]}</TableCell>
+
+                    {/* {row.map((data, j) => (
                     <>
                       <TableCell key={j}>{data}</TableCell>
                     </>
-                  ))}
-                </TableRow>
-              ))}
+                  ))} */}
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </TableContainer>
